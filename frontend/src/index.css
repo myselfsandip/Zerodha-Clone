@@ -1,0 +1,10 @@
+nav .nav-item .hover-link:hover{
+  color:#387ed1;
+}
+
+.trackTicket{
+  font-size: 1rem;
+}
+.trackTicket:hover{
+  opacity: 0.8;
+}
