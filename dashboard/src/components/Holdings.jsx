@@ -1,6 +1,9 @@
-import { holdings } from "../data/data";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const Holdings = () => {
+    const [holdings, setHoldings] = useState([]);
+
     return (
         <>
             <h3 className="title">Holdings ({holdings.length})</h3>
