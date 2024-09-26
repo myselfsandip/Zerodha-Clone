@@ -2,6 +2,10 @@ require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+
+
 const holdingsModel = require("./models/holdingsModel");
 const positionsModel = require("./models/positionsModel");
 const ordersModel = require("./models/ordersModel");
@@ -17,6 +21,10 @@ async function main() {
 
 
 const app = express();
+
+app.use(cors());
+app.use(bodyParser.json());
+
 
 app.get("/", (req, res) => {
     res.json({ msg: "Working Fine!" })
