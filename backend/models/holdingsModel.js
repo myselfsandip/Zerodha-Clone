@@ -11,3 +11,4 @@ const holdingsSchema = new Schema({
 
 const holdingsModel = model("Holding", holdingsSchema);
 module.exports = holdingsModel;
+

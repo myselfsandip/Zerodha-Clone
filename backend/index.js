@@ -4,26 +4,31 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const  cookieParser = require("cookie-parser");
 
 
-const holdingsModel = require("./models/holdingsModel");
-const positionsModel = require("./models/positionsModel");
-const ordersModel = require("./models/ordersModel");
+const routerHoldings = require("./routes/holdings.js");
+const routerPositions = require("./routes/positions.js");
+const routerOrders = require("./routes/orders.js");
+const routerAuth = require("./routes/authRoute.js");
 
 const PORT = process.env.PORT || 3000;
-const URL_MONGO = process.env.MONGO_URL;
+const MONGO_URL = process.env.MONGO_URL;
 
-main().then(() => console.log("DB Connection Successfull!")).catch(err => console.log(err));
-
-async function main() {
-    await mongoose.connect(URL_MONGO);
-}
+mongoose
+    .connect(MONGO_URL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+    .then(() => console.log("MongoDB is  connected successfully"))
+    .catch((err) => console.error(err));
 
 
 const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 
 app.get("/", (req, res) => {
@@ -65,17 +70,19 @@ app.get("/", (req, res) => {
 //     res.status(200).json({ msg: "Success!" });
 // });
 
-
-app.get("/holdings", async (req, res) => {
-    const allHoldings = await holdingsModel.find({});
-    return res.json(allHoldings)
-})
-app.get("/positions", async (req, res) => {
-    const allPositions = await positionsModel.find({});
-    return res.json(allPositions);
-})
+app.use("/holdings" , routerHoldings);
+app.use("/positions",routerPositions);
+app.use("/orders",routerOrders);
+app.use("/auth",routerAuth);
 
 
-app.listen(3000, () => {
+app.all("*", (req, res, next) => {
+    return res.status(404).json({msg:"Page not Found!"});
+});
+
+
+
+
+app.listen(PORT, () => {
     console.log("App is running on PORT 3000");
 })
